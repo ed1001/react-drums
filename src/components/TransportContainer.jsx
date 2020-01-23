@@ -4,17 +4,16 @@ import Transport from "./Transport";
 import "../App";
 
 export default class TransportContainer extends React.Component {
-
-  start = (type) => {
+  start = () => {
     this.props.transport.start();
   };
-  pause = (type) => {
+  pause = () => {
     this.props.transport.pause();
   };
-  stop = (type) => {
+  stop = () => {
     this.props.transport.pause();
   };
-  render(){
+  render() {
     return (
       <div className="transport-container">
         <Transport symbol={"play"} action={this.start} />
