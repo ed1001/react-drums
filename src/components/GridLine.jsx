@@ -1,28 +1,17 @@
-import React from "react";
+import React, { useContext } from "react";
+import { GridContext } from "../contexts/GridContext";
 
 import Note from "./Note";
 
 import "../App";
 
-function GridLine() {
+function GridLine(props) {
+  const context = useContext(GridContext);
   return (
     <div className="grid-line">
-      <Note index="0" />
-      <Note index="1" />
-      <Note index="2" />
-      <Note index="3" />
-      <Note index="4" />
-      <Note index="5" />
-      <Note index="6" />
-      <Note index="7" />
-      <Note index="8" />
-      <Note index="9" />
-      <Note index="10" />
-      <Note index="11" />
-      <Note index="12" />
-      <Note index="13" />
-      <Note index="14" />
-      <Note index="15" />
+      { context.instruments[props.instrument].map((note, index) =>
+        <Note class={`note ${note ? "note-active" : ""}`} note={index} instrument={props.instrument} setGrid={context.setGrid}/>
+      )}
     </div>
   );
 }

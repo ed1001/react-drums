@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from "react-dom";
 
+import GridContextProvider from "./contexts/GridContext"
 import './App.css';
 
 import Box from "./components/Box"
@@ -12,7 +13,11 @@ library.add(faPlay, faStop, faPause);
 
 
 export default function App () {
-  return <Box />;
+  return (
+    <GridContextProvider>
+      <Box />
+    </GridContextProvider>
+  )
 }
 
 ReactDOM.render(<App />, document.getElementById("root"));
