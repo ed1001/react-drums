@@ -38,6 +38,10 @@
   background-color: rgba(210, 210, 210, 0.9);
 }
 
+.grid-line:nth-child(-n+8) {
+  border-bottom: 1px solid rgb(92, 92, 92);
+}
+
 .beat-container {
   position: absolute;
   display: flex;

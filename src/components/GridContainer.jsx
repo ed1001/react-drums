@@ -1,16 +1,19 @@
-import React from "react";
+import React, { useContext } from "react";
+
+import { GridContext } from "../contexts/GridContext";
 
 import GridLine from "./GridLine";
 import BeatContainer from "./BeatContainer";
 import "../App";
 
 function GridContainer(props) {
+    const { instruments } = useContext(GridContext);
   return (
     <div className="grid-container">
       <BeatContainer />
-      <GridLine setGrid={props.setGrid} instrument="A1"/>
-      <GridLine setGrid={props.setGrid} instrument="A2"/>
-      <GridLine setGrid={props.setGrid} instrument="A3"/>
+      { Object.keys(instruments).map((instrument) =>
+        <GridLine instrument={instrument}/>
+      )}
     </div>
   )
 }

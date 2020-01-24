@@ -6,11 +6,11 @@ import Note from "./Note";
 import "../App";
 
 function GridLine(props) {
-  const context = useContext(GridContext);
+    const { instruments, setGrid } = useContext(GridContext);
   return (
     <div className="grid-line">
-      { context.instruments[props.instrument].map((note, index) =>
-        <Note class={`note ${note ? "note-active" : ""}`} note={index} instrument={props.instrument} setGrid={context.setGrid}/>
+      { instruments[props.instrument].map((note, index) =>
+        <Note class={`note ${note ? "note-active" : ""}`} note={index} instrument={props.instrument} setGrid={setGrid}/>
       )}
     </div>
   );

@@ -53,7 +53,7 @@ export default class Box extends React.Component {
     return (
       <div className="box">
         <TransportContainer transport={Tone.Transport} />
-        <BPMContainer />
+        <BPMContainer bpm={this.context.bpm} setBpm={this.context.setBpm}/>
         <GridContainer setGrid={this.setGrid} />
       </div>
     );

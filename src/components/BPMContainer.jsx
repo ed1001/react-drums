@@ -2,14 +2,14 @@ import React from "react";
 
 import "../App";
 
-function BPMContainer() {
+function BPMContainer(props) {
   return (
     <div className="bpm-container">
       <p id="bpm-desc">BPM</p>
-      <p id="bpm-text">180</p>
+      <p id="bpm-text">{props.bpm}</p>
       <div id="arrows">
-        <p className="arrow">▲</p>
-        <p className="arrow">▼</p>
+        <p className="arrow" onClick={() => props.setBpm(props.bpm + 2)}>▲</p>
+        <p className="arrow" onClick={() => props.setBpm(props.bpm - 2)}>▼</p>
       </div>
     </div>
   );

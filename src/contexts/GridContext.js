@@ -6,13 +6,16 @@ export const GridContext = createContext();
 class GridContextProvider extends Component {
     state = {
         instruments: {
-            A1: [1,0,1,0, 1,0,1,0, 1,0,1,0, 1,0,1,0],
-            A2: [0,0,0,0, 1,0,0,0, 0,0,0,0, 1,0,0,0],
-            A3: [1,0,0,0, 0,0,0,1, 1,0,0,0, 0,0,0,0],
-            A4: [1,0,0,0, 0,0,0,1, 1,0,0,0, 0,0,0,0],
-            A5: [1,0,0,0, 0,0,0,1, 1,0,0,0, 0,0,0,0],
-            A6: [1,0,0,0, 0,0,0,1, 1,0,0,0, 0,0,0,0]
-        }
+            A1: [0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0],
+            A2: [0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0],
+            A3: [0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0],
+            A4: [1,0,1,0, 1,0,1,0, 1,0,1,0, 1,0,1,0],
+            A5: [0,0,0,0, 1,0,0,0, 0,0,0,0, 1,0,0,0],
+            A6: [0,0,0,0, 0,0,1,0, 1,0,0,1, 0,0,1,0],
+            A7: [0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0],
+            A8: [1,0,0,0, 0,0,0,1, 1,0,0,0, 0,0,0,0]
+        },
+        bpm: 120,
     }
 
     setGrid = (note, instrument) => {
@@ -21,9 +24,15 @@ class GridContextProvider extends Component {
         this.setState({newState})
     }
 
+    setBpm = (newBpm) => {
+        const newState = this.state;
+        newState.bpm = newBpm;
+        this.setState({newState})
+    }
+
     render() {
         return(
-        <GridContext.Provider value={{...this.state, setGrid: this.setGrid }}>
+        <GridContext.Provider value={{...this.state, setGrid: this.setGrid, setBpm: this.setBpm }}>
             {this.props.children}
         </GridContext.Provider>
         );
