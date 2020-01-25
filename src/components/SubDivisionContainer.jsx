@@ -12,7 +12,11 @@ function SubDivisionContainer() {
       {instruments["A1"].map((_, index) => (
         <SubDivision
           element={index}
-          class={`subdivision ${currentDivision === index && "subdiv-active"}`}
+          class={`${
+            currentDivision === index
+              ? "subdivision subdiv-active"
+              : "subdivision"
+          }`}
           key={index}
         />
       ))}

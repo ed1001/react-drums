@@ -1,5 +1,7 @@
 import React from "react";
 
+import Tone from "tone";
+
 import { GridContext } from "../contexts/GridContext";
 import Transport from "./Transport";
 
@@ -9,14 +11,14 @@ export default class TransportContainer extends React.Component {
   static contextType = GridContext;
 
   start = () => {
-    this.props.transport.start();
+    Tone.Transport.start();
   };
   pause = () => {
-    this.props.transport.pause();
+    Tone.Transport.pause();
   };
   stop = () => {
-    this.props.transport.stop();
-    this.context.setDivision(-1);
+    Tone.Transport.stop();
+    this.context.setDivision(-2);
   };
   render() {
     return (

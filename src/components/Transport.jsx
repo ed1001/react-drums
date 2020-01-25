@@ -4,11 +4,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "../App";
 
 export default class Transport extends React.Component {
-
-  render(){
+  render() {
     return (
       <div className="transport" onClick={() => this.props.action()}>
-        <FontAwesomeIcon icon={this.props.symbol} />
+        <FontAwesomeIcon
+          icon={this.props.symbol}
+          className="transport-symbol"
+        />
       </div>
     );
   }

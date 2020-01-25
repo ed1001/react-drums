@@ -2,10 +2,33 @@ import React, { Component, createContext } from "react";
 
 import Tone from "tone";
 
+import A1 from "../sounds/RideBell_VintageIndie.wav";
+import A2 from "../sounds/Ride_VintageIndie.wav";
+import A3 from "../sounds/HiHatOpen_VintageIndie.wav";
+import A4 from "../sounds/HiHatClosed_VintageIndie.wav";
+import A5 from "../sounds/Snare_VintageIndie.wav";
+import A6 from "../sounds/XStick_VintageIndie.wav";
+import A7 from "../sounds/Tom_VintageIndie.wav";
+import A8 from "../sounds/Kick_VintageIndie.wav";
+
 export const GridContext = createContext();
 
 class GridContextProvider extends Component {
   state = {
+    drumKit: new Tone.Sampler(
+      {
+        A1,
+        A2,
+        A3,
+        A4,
+        A5,
+        A6,
+        A7,
+        A8
+      },
+      {}
+    ).toMaster(),
+    sequence: {},
     instruments: {
       A1: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       A2: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -16,8 +39,38 @@ class GridContextProvider extends Component {
       A7: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       A8: [1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0]
     },
-    bpm: 120,
-    currentDivision: 0
+    instrumentLabels: {
+      A1: "Ride bell",
+      A2: "Ride",
+      A3: "Hihat Open",
+      A4: "Hihat Closed",
+      A5: "Snare",
+      A6: "Rim Click",
+      A7: "Tom",
+      A8: "Kick"
+    },
+    bpm: 100,
+    currentDivision: -1
+  };
+
+  componentDidMount = () => {
+    this.sequence = new Tone.Sequence(
+      (_, index) => {
+        for (let instrument of Object.keys(this.state.instrumentLabels)) {
+          if (this.state.instruments[instrument][index]) {
+            this.playNote(instrument);
+          }
+        }
+        this.setDivision();
+      },
+      [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
+      "16n"
+    ).start(0);
+  };
+
+  playNote = instrument => {
+    this.state.drumKit.triggerAttack(instrument);
+    if (instrument === "A4") this.state.drumKit.triggerRelease("A3");
   };
 
   setGrid = (note, instrument) => {
@@ -26,6 +79,7 @@ class GridContextProvider extends Component {
       instrument
     ][note];
     this.setState({ newState });
+    this.playNote(instrument);
   };
 
   setBpm = newBpm => {
@@ -46,7 +100,8 @@ class GridContextProvider extends Component {
           ...this.state,
           setGrid: this.setGrid,
           setBpm: this.setBpm,
-          setDivision: this.setDivision
+          setDivision: this.setDivision,
+          playNote: this.playNote
         }}
       >
         {this.props.children}
