@@ -1,0 +1,30 @@
+{
+  "files": {
+    "main.css": "/react-drums/static/css/main.44f28845.chunk.css",
+    "main.js": "/react-drums/static/js/main.8992e0d8.chunk.js",
+    "main.js.map": "/react-drums/static/js/main.8992e0d8.chunk.js.map",
+    "runtime-main.js": "/react-drums/static/js/runtime-main.47fa5ed6.js",
+    "runtime-main.js.map": "/react-drums/static/js/runtime-main.47fa5ed6.js.map",
+    "static/js/2.a9eaa1cb.chunk.js": "/react-drums/static/js/2.a9eaa1cb.chunk.js",
+    "static/js/2.a9eaa1cb.chunk.js.map": "/react-drums/static/js/2.a9eaa1cb.chunk.js.map",
+    "index.html": "/react-drums/index.html",
+    "precache-manifest.f005f91e7aa4876cc7ee0e9438fa0db3.js": "/react-drums/precache-manifest.f005f91e7aa4876cc7ee0e9438fa0db3.js",
+    "service-worker.js": "/react-drums/service-worker.js",
+    "static/css/main.44f28845.chunk.css.map": "/react-drums/static/css/main.44f28845.chunk.css.map",
+    "static/js/2.a9eaa1cb.chunk.js.LICENSE": "/react-drums/static/js/2.a9eaa1cb.chunk.js.LICENSE",
+    "static/media/HiHatClosed_VintageIndie.wav": "/react-drums/static/media/HiHatClosed_VintageIndie.ccba712c.wav",
+    "static/media/HiHatOpen_VintageIndie.wav": "/react-drums/static/media/HiHatOpen_VintageIndie.71b2cf73.wav",
+    "static/media/Kick_VintageIndie.wav": "/react-drums/static/media/Kick_VintageIndie.fcdae127.wav",
+    "static/media/RideBell_VintageIndie.wav": "/react-drums/static/media/RideBell_VintageIndie.09d28e60.wav",
+    "static/media/Ride_VintageIndie.wav": "/react-drums/static/media/Ride_VintageIndie.1b44ebe7.wav",
+    "static/media/Snare_VintageIndie.wav": "/react-drums/static/media/Snare_VintageIndie.5bbd4d6f.wav",
+    "static/media/Tom_VintageIndie.wav": "/react-drums/static/media/Tom_VintageIndie.46b4c8d7.wav",
+    "static/media/XStick_VintageIndie.wav": "/react-drums/static/media/XStick_VintageIndie.c09137cf.wav"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.47fa5ed6.js",
+    "static/js/2.a9eaa1cb.chunk.js",
+    "static/css/main.44f28845.chunk.css",
+    "static/js/main.8992e0d8.chunk.js"
+  ]
+}
