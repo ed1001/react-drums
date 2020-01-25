@@ -12,10 +12,11 @@ import {
   faStop,
   faPause,
   faEraser,
-  faPencilAlt
+  faPencilAlt,
+  faTrashAlt
 } from "@fortawesome/free-solid-svg-icons";
 
-library.add(faPlay, faStop, faPause, faEraser, faPencilAlt);
+library.add(faPlay, faStop, faPause, faEraser, faPencilAlt, faTrashAlt);
 
 export default function App() {
   return (

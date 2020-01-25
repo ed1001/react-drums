@@ -6,10 +6,13 @@ import "../App";
 export default class Transport extends React.Component {
   render() {
     return (
-      <div className="transport" onClick={() => this.props.action()}>
+      <div
+        className="transport symbol-container"
+        onClick={() => this.props.action()}
+      >
         <FontAwesomeIcon
           icon={this.props.symbol}
-          className="transport-symbol"
+          className="transport-symbol symbol"
         />
       </div>
     );

@@ -6,9 +6,9 @@ import SubDivision from "./SubDivision";
 import "../App";
 
 function SubDivisionContainer() {
-  const { instruments, currentDivision } = useContext(GridContext);
+  const { instruments, currentDivision, edit } = useContext(GridContext);
   return (
-    <div className="beat-container">
+    <div className={`beat-container ${edit ? "mouse-" + edit : ""}`}>
       {instruments["A1"].map((_, index) => (
         <SubDivision
           element={index}
