@@ -4,18 +4,20 @@ import { GridContext } from "../contexts/GridContext";
 
 import GridLine from "./GridLine";
 import BeatContainer from "./BeatContainer";
+import SubDivisionContainer from "./SubDivisionContainer";
 import "../App";
 
-function GridContainer(props) {
-    const { instruments } = useContext(GridContext);
+function GridContainer() {
+  const { instruments } = useContext(GridContext);
   return (
     <div className="grid-container">
       <BeatContainer />
-      { Object.keys(instruments).map((instrument) =>
-        <GridLine instrument={instrument}/>
-      )}
+      <SubDivisionContainer />
+      {Object.keys(instruments).map((instrument, index) => (
+        <GridLine instrument={instrument} key={index} />
+      ))}
     </div>
-  )
+  );
 }
 
 export default GridContainer;

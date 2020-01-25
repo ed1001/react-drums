@@ -38,7 +38,7 @@
   background-color: rgba(210, 210, 210, 0.9);
 }
 
-.grid-line:nth-child(-n+8) {
+.grid-line:nth-child(-n + 8) {
   border-bottom: 1px solid rgb(92, 92, 92);
 }
 
@@ -50,13 +50,23 @@
   z-index: 1;
 }
 
-.beat:nth-child(-n+3) {
+.beat:nth-child(-n + 3) {
   border-right: 1px solid rgb(92, 92, 92);
 }
 
 .beat {
   height: 100%;
   width: 25%;
+}
+
+.subdivision {
+  height: 100%;
+  width: 6.25%;
+  transition: background-color 0.1s;
+}
+
+.subdiv-active {
+  background-color: rgba(188, 188, 188, 0.8);
 }
 
 .note {
@@ -70,6 +80,10 @@
 
 .note-active {
   background-color: rgba(247, 149, 149, 0.8);
+}
+
+.note-playing {
+  background-color: rgba(100, 255, 149, 0.8);
 }
 
 .transport-container {

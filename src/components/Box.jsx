@@ -20,12 +20,16 @@ import "../App";
 export default class Box extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      bpm: 120,
-    };
     this.drumKit = new Tone.Sampler(
       {
-        A1, A2, A3, A4, A5, A6, A7, A8
+        A1,
+        A2,
+        A3,
+        A4,
+        A5,
+        A6,
+        A7,
+        A8
       },
       {}
     ).toMaster();
@@ -33,7 +37,7 @@ export default class Box extends React.Component {
     this.instruments = ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8"];
   }
 
-  static contextType = GridContext
+  static contextType = GridContext;
 
   componentDidMount = drumKit => {
     this.sequence = new Tone.Sequence(
@@ -41,8 +45,11 @@ export default class Box extends React.Component {
         for (let instrument of this.instruments) {
           if (this.context.instruments[instrument][index]) {
             this.drumKit.triggerAttack(instrument);
+            if (instrument === "A4") this.drumKit.triggerRelease("A3");
           }
         }
+        console.log(this.context.currentDivision);
+        this.context.setDivision();
       },
       [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
       "16n"
@@ -53,7 +60,7 @@ export default class Box extends React.Component {
     return (
       <div className="box">
         <TransportContainer transport={Tone.Transport} />
-        <BPMContainer bpm={this.context.bpm} setBpm={this.context.setBpm}/>
+        <BPMContainer bpm={this.context.bpm} setBpm={this.context.setBpm} />
         <GridContainer setGrid={this.setGrid} />
       </div>
     );

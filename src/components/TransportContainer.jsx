@@ -9,7 +9,6 @@ export default class TransportContainer extends React.Component {
   static contextType = GridContext;
 
   start = () => {
-    this.props.transport.bpm.value = this.context.bpm;
     this.props.transport.start();
   };
   pause = () => {
@@ -17,6 +16,7 @@ export default class TransportContainer extends React.Component {
   };
   stop = () => {
     this.props.transport.stop();
+    this.context.setDivision(-1);
   };
   render() {
     return (
