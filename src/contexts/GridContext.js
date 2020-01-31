@@ -1,6 +1,6 @@
 import React, { Component, createContext } from "react";
 
-import Tone from "tone";
+import Tone, { Transport, Time, Sampler, Draw } from "tone";
 
 import A1 from "../sounds/RideBell_VintageIndie.wav";
 import A2 from "../sounds/Ride_VintageIndie.wav";
@@ -14,46 +14,61 @@ import A8 from "../sounds/Kick_VintageIndie.wav";
 export const GridContext = createContext();
 
 class GridContextProvider extends Component {
-  state = {
-    drumKit: new Tone.Sampler(
-      {
-        A1,
-        A2,
-        A3,
-        A4,
-        A5,
-        A6,
-        A7,
-        A8
+  constructor() {
+    super();
+
+    const reverb = new Tone.Reverb().toMaster();
+    reverb.generate().then(() => {});
+    reverb.wet.value = 0;
+    reverb.decay = 0;
+    reverb.preDelay = 0;
+
+    const delay = new Tone.FeedbackDelay("16n", 0.2).toMaster();
+    delay.wet.value = 0;
+    delay.delayTime.value = 0;
+    delay.feedback.value = 0;
+
+    this.effects = {
+      reverb,
+      delay
+    };
+
+    this.state = {
+      drumKit: new Sampler({ A1, A2, A3, A4, A5, A6, A7, A8 }, {})
+        .connect(reverb)
+        .connect(delay)
+        .toMaster(),
+      sequence: {},
+      instruments: {
+        A1: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        A2: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        A3: [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0],
+        A4: [1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 0, 0],
+        A5: [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0],
+        A6: [0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0],
+        A7: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        A8: [1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0]
       },
-      {}
-    ).toMaster(),
-    sequence: {},
-    instruments: {
-      A1: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      A2: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      A3: [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0],
-      A4: [1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 0, 0],
-      A5: [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0],
-      A6: [0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0],
-      A7: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      A8: [1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0]
-    },
-    instrumentLabels: {
-      A1: "Ride bell",
-      A2: "Ride",
-      A3: "Hihat Open",
-      A4: "Hihat Closed",
-      A5: "Snare",
-      A6: "Rim Click",
-      A7: "Tom",
-      A8: "Kick"
-    },
-    bpm: 100,
-    currentDivision: -1,
-    mouseDown: false,
-    edit: 0
-  };
+      instrumentLabels: {
+        A1: "Ride bell",
+        A2: "Ride",
+        A3: "Hihat Open",
+        A4: "Hihat Closed",
+        A5: "Snare",
+        A6: "Rim Click",
+        A7: "Tom",
+        A8: "Kick"
+      },
+      bpm: 100,
+      currentDivision: -1,
+      mouseDown: false,
+      edit: 0,
+      loopId: null,
+      loopLength: "1m",
+      currentEffect: 0,
+      effects: ["reverb", "delay"]
+    };
+  }
 
   componentDidMount = () => {
     window.addEventListener("mousedown", () => {
@@ -63,18 +78,32 @@ class GridContextProvider extends Component {
       this.setState({ mouseDown: false });
     });
 
-    this.sequence = new Tone.Sequence(
-      (_, index) => {
-        for (let instrument of Object.keys(this.state.instrumentLabels)) {
-          if (this.state.instruments[instrument][index]) {
-            this.playNote(instrument);
-          }
-        }
-        this.setDivision();
-      },
-      [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
-      "16n"
-    ).start(0);
+    this.createLoop(this.state.loopLength);
+  };
+
+  setContextState = (property, val) => {
+    this.setState({ [property]: val });
+  };
+
+  createLoop = length => {
+    Transport.loop = true;
+    Transport.loopEnd = length;
+    Transport.clear(this.state.loopId);
+    const loop = time => {
+      this.draw(time);
+      for (let instrument in this.state.instruments) {
+        this.state.instruments[instrument].forEach((note, i) => {
+          if (note) this.scheduleNote(instrument, time + i * Time("16n").toSeconds());
+        });
+      }
+    };
+    const loopId = Transport.schedule(loop, "0");
+    this.setState({ loopId });
+  };
+
+  scheduleNote = (instrument, time) => {
+    this.state.drumKit.triggerAttack(instrument, time);
+    if (instrument === "A4") this.state.drumKit.triggerRelease("A3", time);
   };
 
   playNote = instrument => {
@@ -82,9 +111,16 @@ class GridContextProvider extends Component {
     if (instrument === "A4") this.state.drumKit.triggerRelease("A3");
   };
 
+  draw = time => {
+    for (let i = 0; i < 16; i++) {
+      Draw.schedule(() => {
+        this.setDivision(i);
+      }, time + i * Time("16n").toSeconds());
+    }
+  };
+
   setGrid = (note, instrument, edit = false) => {
-    if (!this.state.instruments[instrument][note] && edit !== "0")
-      this.playNote(instrument);
+    if (!this.state.instruments[instrument][note] && edit !== "0") this.playNote(instrument);
     const newState = this.state;
     const newVal = edit ? +edit : !this.state.instruments[instrument][note];
     newState.instruments[instrument][note] = newVal;
@@ -104,11 +140,11 @@ class GridContextProvider extends Component {
     const newState = this.state;
     newState.bpm = newBpm;
     this.setState({ newState });
-    Tone.Transport.bpm.value = newBpm;
+    Transport.bpm.value = newBpm;
   };
 
   setDivision = (num = this.state.currentDivision) => {
-    this.setState({ currentDivision: (num + 1) % 16 });
+    this.setState({ currentDivision: num });
   };
 
   clearAll = () => {
@@ -118,6 +154,28 @@ class GridContextProvider extends Component {
       }
     }
     this.setState({ edit: this.state.edit });
+  };
+
+  capNum(num, min, max) {
+    if (num > max) return max;
+    if (num < min) return min;
+    return num;
+  }
+
+  setEffectParam = (effect, param, val) => {
+    try {
+      this.effects[effect][param].value = val;
+    } catch {
+      this.effects[effect][param] = val;
+    }
+  };
+
+  getEffectParam = (effect, param) => {
+    try {
+      return this.effects[effect][param].value;
+    } catch {
+      return this.effects[effect][param];
+    }
   };
 
   render() {
@@ -131,7 +189,12 @@ class GridContextProvider extends Component {
           playNote: this.playNote,
           editGrid: this.editGrid,
           toggleEditMode: this.toggleEditMode,
-          clearAll: this.clearAll
+          clearAll: this.clearAll,
+          createLoop: this.createLoop,
+          capNum: this.capNum,
+          setEffectParam: this.setEffectParam,
+          getEffectParam: this.getEffectParam,
+          setContextState: this.setContextState
         }}
       >
         {this.props.children}
