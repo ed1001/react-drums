@@ -1,18 +1,18 @@
 import React, { useContext } from "react";
 
 import EffectParam from "./EffectParam";
-import { GridContext } from "../contexts/GridContext";
+import { SoundContext } from "../contexts/SoundContext";
 
 import "../App";
 
 function Effect(props) {
-  const { effects, currentEffect, setContextState, getEffectParam } = useContext(GridContext);
+  const { effects, currentEffect, setContextState, getEffectParam } = useContext(SoundContext);
 
   return (
     <div className="effect">
       <div className="effect-name">
         <div
-          className="effect-nav"
+          className="effect-nav arrow"
           onClick={() => {
             setContextState("currentEffect", Math.abs((currentEffect - 1) % effects.length));
           }}
@@ -20,7 +20,10 @@ function Effect(props) {
           {"<"}
         </div>
         <div>{props.label}</div>
-        <div className="effect-nav" onClick={() => setContextState("currentEffect", Math.abs((currentEffect + 1) % effects.length))}>
+        <div
+          className="effect-nav arrow"
+          onClick={() => setContextState("currentEffect", Math.abs((currentEffect + 1) % effects.length))}
+        >
           {">"}
         </div>
       </div>

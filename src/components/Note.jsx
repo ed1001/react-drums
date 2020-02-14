@@ -1,19 +1,19 @@
 import React, { useContext } from "react";
 
-import { GridContext } from "../contexts/GridContext";
+import { SoundContext } from "../contexts/SoundContext";
 import "../App";
 
 const Note = props => {
-  const { mouseDown, edit, editGrid } = useContext(GridContext);
+  const { mouseDown, edit, editGrid, setGrid } = useContext(SoundContext);
   return (
     <div
       className={`${props.class} ${edit ? "mouse-" + edit : ""}`}
       onMouseDown={() => {
-        props.setGrid(props.note, props.instrument, edit);
+        setGrid(props.note, props.instrument, edit);
       }}
       onMouseEnter={() => {
         if (mouseDown && edit) {
-          editGrid(edit, props.note, props.instrument);
+          editGrid(props.note, props.instrument, edit);
         }
       }}
     ></div>

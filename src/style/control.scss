@@ -1,0 +1,19 @@
+.control-container {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 100%;
+  width: 68%;
+  background-color: $bgGrey;
+}
+
+.control {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 78%;
+  width: 28%;
+  background-color: $bgDarkGrey;
+  cursor: pointer;
+  font-size: 3em;
+}

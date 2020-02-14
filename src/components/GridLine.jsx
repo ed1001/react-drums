@@ -1,12 +1,12 @@
 import React, { Component } from "react";
-import { GridContext } from "../contexts/GridContext";
+import { SoundContext } from "../contexts/SoundContext";
 
 import Note from "./Note";
 
 import "../App";
 
 class GridLine extends Component {
-  static contextType = GridContext;
+  static contextType = SoundContext;
 
   instrPlay = instrument => {
     this.context.playNote(instrument);
@@ -28,23 +28,15 @@ class GridLine extends Component {
           {this.context.instrumentLabels[this.props.instrument]}
         </div>
         <div className="notes">
-          {this.context.instruments[this.props.instrument].map(
-            (note, index) => (
-              <Note
-                class={`note ${
-                  note && index === this.context.currentDivision
-                    ? "note-playing"
-                    : note
-                    ? "note-active"
-                    : ""
-                }`}
-                note={index}
-                instrument={this.props.instrument}
-                setGrid={this.context.setGrid}
-                key={index}
-              />
-            )
-          )}
+          {this.context.instruments[this.props.instrument].map(({ note, velocity }, index) => (
+            <Note
+              class={`note ${note && index === this.context.currentDivision ? "note-playing" : note ? "note-active" : ""}`}
+              note={index}
+              instrument={this.props.instrument}
+              setGrid={this.context.setGrid}
+              key={index}
+            />
+          ))}
         </div>
       </div>
     );

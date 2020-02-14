@@ -1,11 +1,11 @@
 import React from "react";
 
-import { GridContext } from "../contexts/GridContext";
+import { SoundContext } from "../contexts/SoundContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "../App";
 
 export default class Edit extends React.Component {
-  static contextType = GridContext;
+  static contextType = SoundContext;
 
   state = {
     active: false
@@ -19,6 +19,9 @@ export default class Edit extends React.Component {
           if (this.props.edit === "clear") {
             this.context.clearAll();
             return;
+          } else if (this.props.edit === "2") {
+            this.context.setVelocity();
+            return;
           }
           this.context.toggleEditMode(this.props.edit);
           this.setState({ active: !this.state.active });
@@ -26,9 +29,7 @@ export default class Edit extends React.Component {
       >
         <FontAwesomeIcon
           icon={this.props.symbol}
-          className={`edit-symbol symbol ${
-            this.context.edit === this.props.edit ? "edit-active" : ""
-          }`}
+          className={`edit-symbol symbol ${this.context.edit === this.props.edit ? "edit-active" : ""}`}
         />
       </div>
     );

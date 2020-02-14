@@ -1,0 +1,102 @@
+.grid-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  height: 29em;
+  width: 100%;
+}
+
+.grid-line {
+  display: flex;
+  width: 100%;
+  height: 20%;
+}
+
+.grid-line:nth-child(-n + 9) {
+  border-bottom: 1px solid white;
+}
+
+.instr-name {
+  width: 12%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2em;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+.instr-name-active {
+  animation: note-play 0.4s;
+}
+
+@keyframes note-play {
+  from {
+    color: white;
+    border-radius: 20px;
+    background-color: $activeRed;
+  }
+
+  to {
+    color: black;
+    border-radius: 0px;
+    background-color: $activeRedTrans;
+  }
+}
+
+.notes {
+  width: 88%;
+  height: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.note {
+  width: 4%;
+  height: 70%;
+  border-radius: 5px;
+  background-color: $noteGrey;
+  transition: background-color 0.2s;
+  z-index: 2;
+  cursor: pointer;
+}
+
+.note-active {
+  background-color: $activeRed;
+}
+
+.note-playing {
+  background-color: $noteGreen;
+}
+
+.beat-container {
+  position: absolute;
+  display: flex;
+  right: 0;
+  width: 88%;
+  height: 100%;
+  z-index: 1;
+}
+
+.beat:nth-child(-n + 3) {
+  border-right: 1px solid white;
+}
+
+.beat {
+  height: 100%;
+  width: 25%;
+}
+
+.subdivision {
+  height: 100%;
+  width: 6.25%;
+  transition: background-color 0.1s;
+}
+
+.subdiv-active {
+  background-color: rgba(188, 188, 188, 0.8);
+}

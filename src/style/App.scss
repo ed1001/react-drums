@@ -1,0 +1,81 @@
+@import url("https://fonts.googleapis.com/css?family=Monda&display=swap");
+@import "variables.scss";
+@import "edit.scss";
+@import "control.scss";
+@import "bpm.scss";
+@import "grid.scss";
+@import "effect.scss";
+
+#root {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "Monda", sans-serif;
+  user-select: none;
+}
+
+.box {
+  font-size: $scale;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 125em;
+  height: 50em;
+  min-width: 50em;
+  min-height: 20em;
+  background-color: $bglightGrey;
+  margin-top: 8em;
+}
+
+.comp {
+  background-color: $bgGrey;
+}
+
+.main-container {
+  display: flex;
+  justify-content: space-between;
+  width: 110em;
+  height: 40em;
+}
+
+.left-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 90em;
+  height: 100%;
+}
+
+.upper-container {
+  display: flex;
+  justify-content: space-between;
+  height: 10em;
+  width: 100%;
+}
+
+.symbol {
+  transition: all 0.12s;
+}
+
+.symbol-container {
+  &:hover .symbol {
+    transform: scale(1.1);
+  }
+  &:active .symbol {
+    color: $activeRed;
+    transform: scale(0.95);
+  }
+}
+
+.mouse-0 {
+  cursor: url(../images/eraser.png) 0 32, auto;
+}
+
+.mouse-1 {
+  cursor: url(../images/pencil.png) 0 32, auto;
+}
+
+.mouse-2 {
+  cursor: url(../images/volume.png) 8 8, auto;
+}

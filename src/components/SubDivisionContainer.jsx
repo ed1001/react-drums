@@ -1,22 +1,18 @@
 import React, { useContext } from "react";
 
-import { GridContext } from "../contexts/GridContext";
+import { SoundContext } from "../contexts/SoundContext";
 
 import SubDivision from "./SubDivision";
 import "../App";
 
 function SubDivisionContainer() {
-  const { instruments, currentDivision, edit } = useContext(GridContext);
+  const { instruments, currentDivision, edit } = useContext(SoundContext);
   return (
     <div className={`beat-container ${edit ? "mouse-" + edit : ""}`}>
       {instruments["A1"].map((_, index) => (
         <SubDivision
           element={index}
-          class={`${
-            currentDivision === index
-              ? "subdivision subdiv-active"
-              : "subdivision"
-          }`}
+          class={`${currentDivision === index ? "subdivision subdiv-active" : "subdivision"}`}
           key={index}
         />
       ))}

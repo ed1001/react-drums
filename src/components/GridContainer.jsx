@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 
-import { GridContext } from "../contexts/GridContext";
+import { SoundContext } from "../contexts/SoundContext";
 
 import GridLine from "./GridLine";
 import BeatContainer from "./BeatContainer";
@@ -8,9 +8,9 @@ import SubDivisionContainer from "./SubDivisionContainer";
 import "../App";
 
 function GridContainer() {
-  const { instrumentLabels } = useContext(GridContext);
+  const { instrumentLabels } = useContext(SoundContext);
   return (
-    <div className="grid-container">
+    <div className="grid-container comp">
       <BeatContainer />
       <SubDivisionContainer />
       {Object.keys(instrumentLabels).map((instrument, index) => (

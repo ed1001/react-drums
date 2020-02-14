@@ -1,12 +1,12 @@
 import React from "react";
 
 import Effect from "./Effect";
-import { GridContext } from "../contexts/GridContext";
+import { SoundContext } from "../contexts/SoundContext";
 
 import "../App";
 
 export default class EffectContainer extends React.Component {
-  static contextType = GridContext;
+  static contextType = SoundContext;
 
   renderSwitch = effect => {
     switch (effect) {
@@ -40,6 +40,6 @@ export default class EffectContainer extends React.Component {
   };
 
   render() {
-    return <div className="effect-container">{this.renderSwitch(this.context.effects[this.context.currentEffect])}</div>;
+    return <div className="effect-container comp">{this.renderSwitch(this.context.effects[this.context.currentEffect])}</div>;
   }
 }

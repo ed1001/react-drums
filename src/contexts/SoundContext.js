@@ -1,4 +1,4 @@
-import React, { Component, createContext } from "react";
+import React, { Component, createContext, useState } from "react";
 
 import Tone, { Transport, Time, Sampler, Draw } from "tone";
 
@@ -11,9 +11,9 @@ import A6 from "../sounds/XStick_VintageIndie.wav";
 import A7 from "../sounds/Tom_VintageIndie.wav";
 import A8 from "../sounds/Kick_VintageIndie.wav";
 
-export const GridContext = createContext();
+export const SoundContext = createContext();
 
-class GridContextProvider extends Component {
+class SoundContextProvider extends Component {
   constructor() {
     super();
 
@@ -33,6 +33,11 @@ class GridContextProvider extends Component {
       delay
     };
 
+    this.templateArray = new Array(16);
+    for (let i = 0; i < 16; i++) {
+      this.templateArray[i] = { note: 0, velocity: 0.5 };
+    }
+
     this.state = {
       drumKit: new Sampler({ A1, A2, A3, A4, A5, A6, A7, A8 }, {})
         .connect(reverb)
@@ -40,14 +45,14 @@ class GridContextProvider extends Component {
         .toMaster(),
       sequence: {},
       instruments: {
-        A1: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        A2: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        A3: [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0],
-        A4: [1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 0, 0],
-        A5: [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0],
-        A6: [0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0],
-        A7: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        A8: [1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0]
+        A1: JSON.parse(JSON.stringify(this.templateArray)),
+        A2: JSON.parse(JSON.stringify(this.templateArray)),
+        A3: JSON.parse(JSON.stringify(this.templateArray)),
+        A4: JSON.parse(JSON.stringify(this.templateArray)),
+        A5: JSON.parse(JSON.stringify(this.templateArray)),
+        A6: JSON.parse(JSON.stringify(this.templateArray)),
+        A7: JSON.parse(JSON.stringify(this.templateArray)),
+        A8: JSON.parse(JSON.stringify(this.templateArray))
       },
       instrumentLabels: {
         A1: "Ride bell",
@@ -61,12 +66,12 @@ class GridContextProvider extends Component {
       },
       bpm: 100,
       currentDivision: -1,
-      mouseDown: false,
-      edit: 0,
       loopId: null,
       loopLength: "1m",
       currentEffect: 0,
-      effects: ["reverb", "delay"]
+      effects: ["reverb", "delay"],
+      mouseDown: false,
+      edit: 0
     };
   }
 
@@ -92,8 +97,8 @@ class GridContextProvider extends Component {
     const loop = time => {
       this.draw(time);
       for (let instrument in this.state.instruments) {
-        this.state.instruments[instrument].forEach((note, i) => {
-          if (note) this.scheduleNote(instrument, time + i * Time("16n").toSeconds());
+        this.state.instruments[instrument].forEach(({ note, velocity }, i) => {
+          if (note) this.scheduleNote(instrument, time + i * Time("16n").toSeconds(), velocity);
         });
       }
     };
@@ -101,8 +106,8 @@ class GridContextProvider extends Component {
     this.setState({ loopId });
   };
 
-  scheduleNote = (instrument, time) => {
-    this.state.drumKit.triggerAttack(instrument, time);
+  scheduleNote = (instrument, time, velocity) => {
+    this.state.drumKit.triggerAttack(instrument, time, velocity);
     if (instrument === "A4") this.state.drumKit.triggerRelease("A3", time);
   };
 
@@ -119,23 +124,6 @@ class GridContextProvider extends Component {
     }
   };
 
-  setGrid = (note, instrument, edit = false) => {
-    if (!this.state.instruments[instrument][note] && edit !== "0") this.playNote(instrument);
-    const newState = this.state;
-    const newVal = edit ? +edit : !this.state.instruments[instrument][note];
-    newState.instruments[instrument][note] = newVal;
-    this.setState({ newState });
-  };
-
-  editGrid = (edit, note, instrument) => {
-    this.setGrid(note, instrument, edit);
-  };
-
-  toggleEditMode = mode => {
-    const newVal = mode === this.state.edit ? 0 : mode;
-    this.setState({ edit: newVal });
-  };
-
   setBpm = newBpm => {
     const newState = this.state;
     newState.bpm = newBpm;
@@ -146,21 +134,6 @@ class GridContextProvider extends Component {
   setDivision = (num = this.state.currentDivision) => {
     this.setState({ currentDivision: num });
   };
-
-  clearAll = () => {
-    for (const instrument in this.state.instruments) {
-      if (this.state.instruments.hasOwnProperty(instrument)) {
-        this.state.instruments[instrument].fill(0, 0);
-      }
-    }
-    this.setState({ edit: this.state.edit });
-  };
-
-  capNum(num, min, max) {
-    if (num > max) return max;
-    if (num < min) return min;
-    return num;
-  }
 
   setEffectParam = (effect, param, val) => {
     try {
@@ -178,29 +151,64 @@ class GridContextProvider extends Component {
     }
   };
 
+  setGrid = (note, instrument, edit = false) => {
+    if (!this.state.instruments[instrument][note].note && edit !== "0") this.playNote(instrument);
+    const newState = this.state;
+    const newVal = edit ? +edit : !this.state.instruments[instrument][note].note;
+    newState.instruments[instrument][note].note = newVal;
+    this.setState({ newState });
+  };
+
+  editGrid = (note, instrument, edit) => {
+    this.setGrid(note, instrument, edit);
+  };
+
+  setVelocity = (note, instrument) => {};
+
+  toggleEditMode = mode => {
+    const newVal = mode === this.state.edit ? 0 : mode;
+    this.setState({ edit: newVal });
+  };
+
+  clearAll = () => {
+    const newState = this.state;
+    for (const instrument in this.state.instruments) {
+      if (this.state.instruments.hasOwnProperty(instrument)) {
+        newState.instruments[instrument] = JSON.parse(JSON.stringify(this.templateArray));
+      }
+    }
+    this.setState(newState);
+  };
+
+  capNum(num, min, max) {
+    if (num > max) return max;
+    if (num < min) return min;
+    return num;
+  }
+
   render() {
     return (
-      <GridContext.Provider
+      <SoundContext.Provider
         value={{
           ...this.state,
-          setGrid: this.setGrid,
           setBpm: this.setBpm,
           setDivision: this.setDivision,
           playNote: this.playNote,
+          createLoop: this.createLoop,
+          setEffectParam: this.setEffectParam,
+          getEffectParam: this.getEffectParam,
+          setContextState: this.setContextState,
+          setGrid: this.setGrid,
           editGrid: this.editGrid,
           toggleEditMode: this.toggleEditMode,
           clearAll: this.clearAll,
-          createLoop: this.createLoop,
-          capNum: this.capNum,
-          setEffectParam: this.setEffectParam,
-          getEffectParam: this.getEffectParam,
-          setContextState: this.setContextState
+          capNum: this.capNum
         }}
       >
         {this.props.children}
-      </GridContext.Provider>
+      </SoundContext.Provider>
     );
   }
 }
 
-export default GridContextProvider;
+export default SoundContextProvider;

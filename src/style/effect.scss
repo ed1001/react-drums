@@ -1,0 +1,60 @@
+.effect-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 15em;
+  height: 100%;
+  box-sizing: border-box;
+  padding: 1em;
+}
+
+.effect {
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  background-color: $bgDarkGrey;
+}
+
+.effect-name {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1.5em;
+  margin: 1em;
+}
+
+.effect-nav {
+  cursor: pointer;
+}
+
+.effect-params {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 85%;
+}
+
+.effect-param {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  height: 35%;
+}
+
+.dial {
+  position: relative;
+  width: 4em;
+  height: 4em;
+  border-radius: 50%;
+  background-color: black;
+}
+
+.dial::before {
+  position: absolute;
+  top: 2.8em;
+  left: 0.7em;
+  content: "";
+  display: inline-block;
+  padding: 0.2em;
+  border-radius: 50%;
+  background-color: white;
+}

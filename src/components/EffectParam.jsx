@@ -1,11 +1,11 @@
 import React from "react";
 
-import { GridContext } from "../contexts/GridContext";
+import { SoundContext } from "../contexts/SoundContext";
 
 import "../App";
 
 export default class EffectParam extends React.Component {
-  static contextType = GridContext;
+  static contextType = SoundContext;
 
   state = {
     value: 0,
@@ -14,20 +14,30 @@ export default class EffectParam extends React.Component {
     increment: 0
   };
 
-  componentWillMount = () => {
-    this.setState({ increment: this.props.maxVal / 260 });
+  componentWillReceiveProps = () => {
+    console.log(this.props);
+    this.setState(
+      { increment: this.props.maxVal / 260 },
+      this.setState(
+        { value: this.context.getEffectParam(this.props.effect, this.props.label) },
+        this.setState({ rotate: { transform: `rotateZ(${this.value}deg)` } })
+      )
+    );
   };
 
   handleMouseMove = e => {
-    const newVal = this.context.capNum(this.state.value + this.state.yPos - e.clientY, 0, 260);
-    this.setState({ value: newVal, yPos: e.clientY, rotate: { transform: `rotateZ(${newVal}deg)` } });
+    const mouseY = e.clientY;
+    const newVal = this.context.capNum(this.state.value + this.state.yPos - mouseY, 0, 260);
+    this.setState({ rotate: { transform: `rotateZ(${newVal}deg)` } });
     this.context.setEffectParam(this.props.effect, this.props.label, newVal * this.state.increment);
   };
 
   handleMouseDown = e => {
-    this.setState({ yPos: e.clientY });
+    const mouseY = e.clientY;
+    this.setState({ yPos: mouseY });
     window.addEventListener("mousemove", this.handleMouseMove);
     window.addEventListener("mouseup", () => {
+      this.setState({ yPos: mouseY });
       window.removeEventListener("mousemove", this.handleMouseMove);
     });
   };

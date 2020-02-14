@@ -1,10 +1,10 @@
 import React from "react";
 
-import { GridContext } from "../contexts/GridContext";
+import { SoundContext } from "../contexts/SoundContext";
 import "../App";
 
 export default class BPMContainer extends React.Component {
-  static contextType = GridContext;
+  static contextType = SoundContext;
 
   state = {
     interval: 200,
@@ -31,12 +31,12 @@ export default class BPMContainer extends React.Component {
 
   render() {
     return (
-      <div className="bpm-container">
-        <p id="bpm-desc">BPM</p>
-        <div id="bpm-text">
+      <div className="bpm-container comp">
+        <p className="bpm-desc">BPM</p>
+        <div className="bpm-text">
           <p>{this.context.bpm}</p>
         </div>
-        <div id="arrows">
+        <div className="arrows">
           <p
             className="arrow"
             onMouseDown={() => {

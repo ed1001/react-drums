@@ -1,5 +1,4 @@
 import React from "react";
-import { GridContext } from "../contexts/GridContext";
 
 import GridContainer from "./GridContainer";
 import ControlContainer from "./ControlContainer";
@@ -9,22 +8,22 @@ import EffectContainer from "./EffectContainer";
 
 import "../App";
 
-export default class Box extends React.Component {
-  static contextType = GridContext;
-
-  render() {
-    return (
-      <div className="box">
+function Box() {
+  return (
+    <div className="box">
+      <div className="main-container">
         <div className="left-container">
           <div className="upper-container">
             <ControlContainer />
             <EditContainer />
             <BPMContainer />
           </div>
-          <GridContainer setGrid={this.setGrid} />
+          <GridContainer />
         </div>
         <EffectContainer />
       </div>
-    );
-  }
+    </div>
+  );
 }
+
+export default Box;
